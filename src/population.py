@@ -51,7 +51,10 @@ class Population:
         right_score = sum(c.fitness for c in right_faction)
         total_score = left_score + right_score
 
-        left_alloc = int(self.size * (left_score / total_score)) if total_score > 0 else self.size // 2
+        raw_left = int(self.size * (left_score / total_score)) if total_score > 0 else self.size // 2
+        min_pop = int(self.size * 0.10) # Guarantee at least 10% survival
+
+        left_alloc = max(min_pop, min(self.size - min_pop, raw_left))
         right_alloc = self.size - left_alloc
 
         new_creatures = []

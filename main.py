@@ -55,7 +55,7 @@ def main():
     moving_door_two = pygame.Rect(475, 100, 20, 100)
     current_obstacles = static_obstacles + [moving_door_one, moving_door_two]
     
-    pop = Population(size = 1000, mutation_rate=.02, start_pos=start_pos, target_pos=target_pos, dna_length=GEN_TTL)
+    pop = Population(size = 800, mutation_rate=.02, start_pos=start_pos, target_pos=target_pos, dna_length=106)
     
     frame_count = 0
     gen = 1
@@ -133,7 +133,7 @@ def main():
                     
                 if stagnation == 5:
                     print(f"*** Stagnation detected. Spiking mutation! ***")
-                    pop.mutation_rate = 0.05
+                    pop.mutation_rate = 0.03
                 elif stagnation > 7:
                     print(f"*** Cooling down mutation to stabilize swarm. ***")
                     pop.mutation_rate = 0.01

@@ -18,7 +18,7 @@ class Creature:
         self.acc = np.zeros(2, dtype=np.float64)
         self.finish_time = 0
 
-        self.brain = NeuralNet(input_size=6, hidden_size=8, output_size=2)
+        self.brain = NeuralNet(input_size=10, hidden_size=8, output_size=2)
         
         if isinstance(dna_source, int):
             self.dna = DNA(self.brain.num_genes)
@@ -51,7 +51,7 @@ class Creature:
         self.acc += force
 
     def get_sensor_data(self, obstacles, target_pos):
-        ray_length = 300.0
+        ray_length = 100.0
         pos_x = float(self.pos[0])
         pos_y = float(self.pos[1])
 
@@ -87,12 +87,21 @@ class Creature:
 
             return float(np.clip(closest / ray_length, 0.0, 1.0))
 
+       # The 4 cardinal directions (Up, Down, Left, Right)
         dist_up = normalized_ray_distance((0, -ray_length))
         dist_down = normalized_ray_distance((0, ray_length))
         dist_left = normalized_ray_distance((-ray_length, 0))
         dist_right = normalized_ray_distance((ray_length, 0))
+        
+        # NEW: The 4 diagonal directions (45 degrees)
+        diag = ray_length * 0.7071
+        dist_ul = normalized_ray_distance((-diag, -diag))
+        dist_ur = normalized_ray_distance((diag, -diag))
+        dist_dl = normalized_ray_distance((-diag, diag))
+        dist_dr = normalized_ray_distance((diag, diag))
 
-        return [dir_x, dir_y, dist_up, dist_down, dist_left, dist_right]
+        # Return all 10 inputs!
+        return [dir_x, dir_y, dist_up, dist_down, dist_left, dist_right, dist_ul, dist_ur, dist_dl, dist_dr]
             
     def update(self, tick, target_pos, width, height, obstacles=None):
         if self.crashed or self.reached_goal:
@@ -121,6 +130,15 @@ class Creature:
 
         self.path_history.append((int(self.pos[0]), int(self.pos[1])))
         inputs = self.get_sensor_data(obstacles, target_pos)
+        
+        # --- FIX 3A: Track reckless driving ---
+        # Indices 2 through 5 are the raycast distances
+        min_sensor = min(inputs[2:]) 
+        if not hasattr(self, 'min_wall_dist'):
+            self.min_wall_dist = 1.0
+        self.min_wall_dist = min(self.min_wall_dist, min_sensor)
+        # --------------------------------------
+        
         force = self.brain.forward(inputs)
         self.apply_force(force)
         self.vel += self.acc
@@ -154,6 +172,9 @@ class Creature:
                 
         elif self.crashed:
             self.fitness *= 0.9
+            
+        safety_multiplier = 0.8 + (0.2 * getattr(self, 'min_wall_dist', 1.0))
+        self.fitness *= safety_multiplier
                 
     def draw(self, screen):
         if pygame is None:
