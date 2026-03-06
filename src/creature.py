@@ -2,6 +2,7 @@ try:
     import pygame
 except ImportError:
     pygame = None
+import math
 import numpy as np
 from src.dna import DNA
 from src.nn import NeuralNet
@@ -51,9 +52,11 @@ class Creature:
 
     def get_sensor_data(self, obstacles, target_pos):
         ray_length = 300.0
+        pos_x = float(self.pos[0])
+        pos_y = float(self.pos[1])
 
         to_target = target_pos - self.pos
-        target_dist = np.linalg.norm(to_target)
+        target_dist = math.hypot(float(to_target[0]), float(to_target[1]))
         if target_dist > 0:
             direction = to_target / target_dist
             dir_x = float(direction[0])
@@ -63,8 +66,8 @@ class Creature:
             dir_y = 0.0
 
         def normalized_ray_distance(end_offset):
-            start = (int(self.pos[0]), int(self.pos[1]))
-            end = (int(self.pos[0] + end_offset[0]), int(self.pos[1] + end_offset[1]))
+            start = (int(pos_x), int(pos_y))
+            end = (int(pos_x + end_offset[0]), int(pos_y + end_offset[1]))
             closest = ray_length
 
             if obstacles is None:
@@ -77,8 +80,8 @@ class Creature:
                 if hit:
                     hit_points = hit if isinstance(hit, tuple) else tuple(hit)
                     if len(hit_points) >= 2:
-                        hit_pos = np.array(hit_points[0], dtype=np.float64)
-                        dist = np.linalg.norm(hit_pos - self.pos)
+                        hit_x, hit_y = hit_points[0]
+                        dist = math.hypot(float(hit_x) - pos_x, float(hit_y) - pos_y)
                         if dist < closest:
                             closest = dist
 
@@ -92,38 +95,43 @@ class Creature:
         return [dir_x, dir_y, dist_up, dist_down, dist_left, dist_right]
             
     def update(self, tick, target_pos, width, height, obstacles=None):
-        dist_to_target = np.linalg.norm(target_pos - self.pos)
+        if self.crashed or self.reached_goal:
+            return
+
+        delta = target_pos - self.pos
+        dist_to_target = math.hypot(float(delta[0]), float(delta[1]))
         self.closest_dist = min(self.closest_dist, dist_to_target)
-            
-        if not self.reached_goal and dist_to_target < 15:
+
+        if dist_to_target < 15:
             self.reached_goal = True
             self.pos = target_pos.copy()
-            self.finish_time = tick 
-        elif (self.pos[0] < 0 or self.pos[0] > width 
-              or self.pos[1] < 0 or self.pos[1] > height):
-                self.crashed = True
-        elif obstacles is not None:
+            self.finish_time = tick
+            return
+
+        if (self.pos[0] < 0 or self.pos[0] > width
+                or self.pos[1] < 0 or self.pos[1] > height):
+            self.crashed = True
+            return
+
+        if obstacles is not None:
             for obs in obstacles:
                 if obs.collidepoint(self.pos[0], self.pos[1]):
                     self.crashed = True
-                    break
-            
-        if not self.crashed and not self.reached_goal:
-            self.path_history.append((int(self.pos[0]), int(self.pos[1])))
+                    return
 
-        if not self.crashed and not self.reached_goal:
-            inputs = self.get_sensor_data(obstacles, target_pos)
-            force = self.brain.forward(inputs)
-            self.apply_force(force)
-            self.vel += self.acc
-            
-            speed = np.linalg.norm(self.vel)
-            if speed > 6.0:
-                self.vel = (self.vel / speed) * 6.0
-                
-            self.pos += self.vel
-            self.acc[:] = 0
-            self.lifetime = tick
+        self.path_history.append((int(self.pos[0]), int(self.pos[1])))
+        inputs = self.get_sensor_data(obstacles, target_pos)
+        force = self.brain.forward(inputs)
+        self.apply_force(force)
+        self.vel += self.acc
+
+        speed = math.hypot(float(self.vel[0]), float(self.vel[1]))
+        if speed > 6.0:
+            self.vel = (self.vel / speed) * 6.0
+
+        self.pos += self.vel
+        self.acc[:] = 0
+        self.lifetime = tick
                 
     def calc_fitness(self, target_pos):
         if len(self.path_history) > 0:
@@ -161,4 +169,4 @@ class Creature:
         else:
             color = self.color
                 
-        pygame.draw.circle(screen, color, tuple(self.pos.astype(int)), 5)
+        pygame.draw.circle(screen, color, (int(self.pos[0]), int(self.pos[1])), 5)

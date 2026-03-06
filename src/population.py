@@ -5,8 +5,8 @@ class Population:
     def __init__(self, size, mutation_rate, start_pos, target_pos, dna_length):
         self.size = size
         self.mutation_rate = mutation_rate
-        self.start_pos = start_pos
-        self.target_pos = target_pos
+        self.start_pos = np.asarray(start_pos, dtype=np.float64)
+        self.target_pos = np.asarray(target_pos, dtype=np.float64)
         self.dna_length = dna_length
 
         self.colors = {
@@ -21,6 +21,8 @@ class Population:
         
     def update(self, tick, width, height, obstacles=None):
         for creature in self.creatures:
+            if creature.crashed or creature.reached_goal:
+                continue
             creature.update(tick, self.target_pos, width, height, obstacles)
             
     def draw(self, screen):
