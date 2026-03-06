@@ -1,0 +1,4 @@
+Generation,Max_Fitness,Avg_Fitness,Successes,Crashes,Left_Faction,Right_Faction,Mutation_Rate
+1,63.67,21.0,0,999,524,476,0.02
+2,63.67,24.23,0,1000,510,490,0.01
+3,63.67,24.64,0,1000,507,493,0.01
