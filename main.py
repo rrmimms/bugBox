@@ -14,9 +14,11 @@ PANEL_TABLE_BG_COLOR = (8, 10, 14)
 PANEL_HEADER_COLOR = (245, 226, 162)
 PANEL_TEXT_COLOR = (238, 244, 252)
 
-SIM_WIDTH, HEIGHT = 800, 600
-PANEL_WIDTH = 360
-WIDTH = SIM_WIDTH + PANEL_WIDTH
+SIM_WIDTH = 800
+SIM_HEIGHT = 600
+PANEL_HEIGHT = 240
+WIDTH = SIM_WIDTH
+HEIGHT = SIM_HEIGHT + PANEL_HEIGHT
 
 FPS = 60
 
@@ -29,11 +31,11 @@ def main():
     pygame.display.set_caption("bugBox")
     clock = pygame.time.Clock()
     font = pygame.font.SysFont("monospace", 15)
+    small_font_14 = pygame.font.SysFont("monospace", 14)
     small_font_12 = pygame.font.SysFont("monospace", 12)
-    small_font_10 = pygame.font.SysFont("monospace", 10)
     
     target_pos = [SIM_WIDTH // 2, 50]
-    start_pos = [SIM_WIDTH // 2, HEIGHT - 50]
+    start_pos = [SIM_WIDTH // 2, SIM_HEIGHT - 50]
     
     # Zig-zag obstacles
     # The Full Labyrinth
@@ -72,8 +74,8 @@ def main():
     running = True
     
     SIM_SPEED = 5
-    panel_x, panel_y = SIM_WIDTH + 10, 10
-    panel_width = PANEL_WIDTH - 20
+    panel_x, panel_y = 10, SIM_HEIGHT + 10
+    panel_width = WIDTH - 20
     headers = ["Gen", "MaxF", "AvgF", "Succ", "Crash", "Left", "Right", "Mut"]
     col_padding = 8
     left_padding = 8
@@ -92,7 +94,7 @@ def main():
             moving_door_one.y = int(door_y)
             moving_door_two.y = int(door_y)
             
-            pop.update(frame_count, SIM_WIDTH, HEIGHT, current_obstacles)
+            pop.update(frame_count, SIM_WIDTH, SIM_HEIGHT, current_obstacles)
             frame_count += 1
             
             if all(c.crashed or c.reached_goal for c in pop.creatures):
@@ -174,7 +176,7 @@ def main():
                 for row in reversed(telemetry_history)
             ]
 
-            small_font = small_font_12
+            small_font = small_font_14
             col_widths = []
             for column_index, header in enumerate(headers):
                 content_width = small_font.size(header)[0]
@@ -186,7 +188,7 @@ def main():
 
             available_table_width = panel_width - left_padding - right_padding
             if sum(col_widths) > available_table_width:
-                small_font = small_font_10
+                small_font = small_font_12
                 col_widths = []
                 for column_index, header in enumerate(headers):
                     content_width = small_font.size(header)[0]
@@ -220,13 +222,13 @@ def main():
 
             telemetry_dirty = False
 
-        pygame.draw.rect(screen, PANEL_BG_COLOR, (SIM_WIDTH, 0, PANEL_WIDTH, HEIGHT))
-        pygame.draw.line(screen, PANEL_HEADER_COLOR, (SIM_WIDTH, 0), (SIM_WIDTH, HEIGHT), 2)
+        pygame.draw.rect(screen, PANEL_BG_COLOR, (0, SIM_HEIGHT, WIDTH, PANEL_HEIGHT))
+        pygame.draw.line(screen, PANEL_HEADER_COLOR, (0, SIM_HEIGHT), (WIDTH, SIM_HEIGHT), 2)
         if telemetry_panel_surface is not None:
             screen.blit(telemetry_panel_surface, (panel_x, panel_y))
             
         pygame.display.flip()
-        clock.tick(FPS)
+        clock.tick(0)
             
     pygame.quit()
     sys.exit()

@@ -1,0 +1,13 @@
+Hello from the pygame community. https://www.pygame.org/contribute.html
+Benchmarking mode=multi | 6 run(s) x 25 generation(s) each...
+[multi] Launching 6 run(s) across 4 worker(s) for 25 generation(s) per run...
+[multi] Run 1/6 finished (run_id=4, pid=19303, seed=None) | run_time=71.626s best_fit=19185.00000 throughput=0.01 runs/s
+[multi] Run 2/6 finished (run_id=1, pid=19300, seed=None) | run_time=100.688s best_fit=39.41926 throughput=0.02 runs/s
+[multi] Run 3/6 finished (run_id=2, pid=19301, seed=None) | run_time=103.511s best_fit=19220.00000 throughput=0.03 runs/s
+[multi] Run 4/6 finished (run_id=3, pid=19302, seed=None) | run_time=104.719s best_fit=19200.00000 throughput=0.04 runs/s
+[multi] Run 5/6 finished (run_id=5, pid=19303, seed=None) | run_time=71.399s best_fit=32.86638 throughput=0.03 runs/s
+[multi] Run 6/6 finished (run_id=6, pid=19300, seed=None) | run_time=69.771s best_fit=247.65771 throughput=0.04 runs/s
+[multi] All runs complete | wall_time=170.555s aggregate_throughput=0.04 runs/s avg_run=86.952s min_run=69.771s max_run=104.719s
+4-worker time: 170.5546s
+4-worker throughput: 0.04 runs/s
+Best fitness observed: 19220.00000
