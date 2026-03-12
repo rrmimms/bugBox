@@ -1,0 +1,81 @@
+[ 54%] Built target glfw
+[ 72%] Built target raylib
+[ 86%] Built target bugbox
+[ 88%] Building CXX object CMakeFiles/bugbox_headless.dir/src_cpp/headless_main.cpp.o
+/home/robert/personalProjects/bugBox/src_cpp/headless_main.cpp: In function ‘SimulationResult run_simulation(int, std::string, unsigned int, bool, int)’:
+/home/robert/personalProjects/bugBox/src_cpp/headless_main.cpp:69:66: error: no matching function for call to ‘Population::Population(const int&, double, std::vector<int>&, std::vector<int>&, const int&)’
+   69 |     Population pop(POP_SIZE, 0.02, start_pos, target_pos, GEN_TTL);
+      |                                                                  ^
+In file included from /home/robert/personalProjects/bugBox/src_cpp/headless_main.cpp:1:
+/home/robert/personalProjects/bugBox/include/population.hpp:23:5: note: candidate: ‘Population::Population(int, double, Point, Point)’
+   23 |     Population(int size, double mutation_rate, Point start_pos, Point target_pos);
+      |     ^~~~~~~~~~
+/home/robert/personalProjects/bugBox/include/population.hpp:23:5: note:   candidate expects 4 arguments, 5 provided
+/home/robert/personalProjects/bugBox/include/population.hpp:13:7: note: candidate: ‘Population::Population(const Population&)’
+   13 | class Population {
+      |       ^~~~~~~~~~
+/home/robert/personalProjects/bugBox/include/population.hpp:13:7: note:   candidate expects 1 argument, 5 provided
+/home/robert/personalProjects/bugBox/include/population.hpp:13:7: note: candidate: ‘Population::Population(Population&&)’
+/home/robert/personalProjects/bugBox/include/population.hpp:13:7: note:   candidate expects 1 argument, 5 provided
+/home/robert/personalProjects/bugBox/src_cpp/headless_main.cpp:108:56: error: cannot convert ‘std::vector<std::vector<int> >’ to ‘const std::vector<Obstacle>&’
+  108 |         pop.update(frame_count, SIM_WIDTH, SIM_HEIGHT, current_obstacles);
+      |                                                        ^~~~~~~~~~~~~~~~~
+      |                                                        |
+      |                                                        std::vector<std::vector<int> >
+/home/robert/personalProjects/bugBox/include/population.hpp:25:85: note:   initializing argument 4 of ‘void Population::update(int, double, double, const std::vector<Obstacle>&)’
+   25 |     void update(int tick, double width, double height, const std::vector<Obstacle>& obstacles);
+      |                                                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~
+/home/robert/personalProjects/bugBox/src_cpp/headless_main.cpp:113:20: error: ‘const class std::shared_ptr<Creature>’ has no member named ‘crashed’
+  113 |             if (!c.crashed && !c.reached_goal) {
+      |                    ^~~~~~~
+/home/robert/personalProjects/bugBox/src_cpp/headless_main.cpp:113:34: error: ‘const class std::shared_ptr<Creature>’ has no member named ‘reached_goal’
+  113 |             if (!c.crashed && !c.reached_goal) {
+      |                                  ^~~~~~~~~~~~
+/home/robert/personalProjects/bugBox/src_cpp/headless_main.cpp:140:23: error: ‘const class std::shared_ptr<Creature>’ has no member named ‘reached_goal’
+  140 |                 if (c.reached_goal) res.last_successes++;
+      |                       ^~~~~~~~~~~~
+/home/robert/personalProjects/bugBox/src_cpp/headless_main.cpp:141:23: error: ‘const class std::shared_ptr<Creature>’ has no member named ‘crashed’
+  141 |                 if (c.crashed) res.last_crashes++;
+      |                       ^~~~~~~
+/home/robert/personalProjects/bugBox/src_cpp/headless_main.cpp:143:36: error: ‘const class std::shared_ptr<Creature>’ has no member named ‘fitness’
+  143 |                 fitness_total += c.fitness;
+      |                                    ^~~~~~~
+/home/robert/personalProjects/bugBox/src_cpp/headless_main.cpp:144:23: error: ‘const class std::shared_ptr<Creature>’ has no member named ‘fitness’
+  144 |                 if (c.fitness > max_fit) max_fit = c.fitness;
+      |                       ^~~~~~~
+/home/robert/personalProjects/bugBox/src_cpp/headless_main.cpp:144:54: error: ‘const class std::shared_ptr<Creature>’ has no member named ‘fitness’
+  144 |                 if (c.fitness > max_fit) max_fit = c.fitness;
+      |                                                      ^~~~~~~
+/home/robert/personalProjects/bugBox/src_cpp/headless_main.cpp:146:23: error: ‘const class std::shared_ptr<Creature>’ has no member named ‘closest_dist’
+  146 |                 if (c.closest_dist < min_dist) min_dist = c.closest_dist;
+      |                       ^~~~~~~~~~~~
+/home/robert/personalProjects/bugBox/src_cpp/headless_main.cpp:146:61: error: ‘const class std::shared_ptr<Creature>’ has no member named ‘closest_dist’
+  146 |                 if (c.closest_dist < min_dist) min_dist = c.closest_dist;
+      |                                                             ^~~~~~~~~~~~
+/home/robert/personalProjects/bugBox/src_cpp/headless_main.cpp:147:33: error: ‘const class std::shared_ptr<Creature>’ has no member named ‘lifetime’
+  147 |                 life_total += c.lifetime;
+      |                                 ^~~~~~~~
+/home/robert/personalProjects/bugBox/src_cpp/headless_main.cpp:148:45: error: ‘const class std::shared_ptr<Creature>’ has no member named ‘vel’
+  148 |                 speed_total += std::hypot(c.vel[0], c.vel[1]);
+      |                                             ^~~
+/home/robert/personalProjects/bugBox/src_cpp/headless_main.cpp:148:55: error: ‘const class std::shared_ptr<Creature>’ has no member named ‘vel’
+  148 |                 speed_total += std::hypot(c.vel[0], c.vel[1]);
+      |                                                       ^~~
+/home/robert/personalProjects/bugBox/src_cpp/headless_main.cpp:150:23: error: ‘const class std::shared_ptr<Creature>’ has no member named ‘avg_x’
+  150 |                 if (c.avg_x < SIM_WIDTH/2) left_count++; else right_count++;
+      |                       ^~~~~
+/home/robert/personalProjects/bugBox/src_cpp/headless_main.cpp:152:23: error: ‘const class std::shared_ptr<Creature>’ has no member named ‘reached_goal’
+  152 |                 if (c.reached_goal) {
+      |                       ^~~~~~~~~~~~
+/home/robert/personalProjects/bugBox/src_cpp/headless_main.cpp:153:27: error: ‘const class std::shared_ptr<Creature>’ has no member named ‘finish_time’
+  153 |                     if (c.finish_time < best_finish) best_finish = c.finish_time;
+      |                           ^~~~~~~~~~~
+/home/robert/personalProjects/bugBox/src_cpp/headless_main.cpp:153:70: error: ‘const class std::shared_ptr<Creature>’ has no member named ‘finish_time’
+  153 |                     if (c.finish_time < best_finish) best_finish = c.finish_time;
+      |                                                                      ^~~~~~~~~~~
+/home/robert/personalProjects/bugBox/src_cpp/headless_main.cpp:154:39: error: ‘const class std::shared_ptr<Creature>’ has no member named ‘finish_time’
+  154 |                     finish_total += c.finish_time;
+      |                                       ^~~~~~~~~~~
+make[2]: *** [CMakeFiles/bugbox_headless.dir/build.make:79: CMakeFiles/bugbox_headless.dir/src_cpp/headless_main.cpp.o] Error 1
+make[1]: *** [CMakeFiles/Makefile2:207: CMakeFiles/bugbox_headless.dir/all] Error 2
+make: *** [Makefile:156: all] Error 2
