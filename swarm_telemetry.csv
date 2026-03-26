@@ -1,2 +1,2 @@
-Generation,Max_Fitness,Avg_Fitness,Successes,Success_Rate,Crashes,Left_Faction,Right_Faction,Mutation_Rate,Min_Distance,Avg_Lifetime,Avg_Speed,DNA_Diversity,Best_Finish_Time,Avg_Finish_Time
-1,32.7,20.87,0,0.0,800,406,394,0.02,275.356,27.76,5.9867,0.333205,,
+Generation,Max_Fitness,Avg_Fitness,Successes,Crashes,Left_Faction,Right_Faction,Mutation_Rate
+1,38.43,18.7,0,800,409,391,0.02
